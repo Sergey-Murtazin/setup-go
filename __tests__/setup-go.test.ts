@@ -642,13 +642,7 @@ describe('setup-go', () => {
         `Attempting to download ${patchVersion}...`
       );
       expect(logSpy).toHaveBeenCalledWith('Extracting Go...');
-      expect(logSpy).toHaveBeenCalledWith(
-        'Successfully extracted go to /some/other/temp/path'
-      );
       expect(logSpy).toHaveBeenCalledWith('Adding to the cache ...');
-      expect(logSpy).toHaveBeenCalledWith(
-        'Successfully cached go to /cache/go/1.17.5/x64'
-      );
       expect(logSpy).toHaveBeenCalledWith('Added go to the path');
       expect(logSpy).toHaveBeenCalledWith(
         `Successfully setup go version ${versionSpec}`
