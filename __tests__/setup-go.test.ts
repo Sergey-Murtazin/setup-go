@@ -597,7 +597,7 @@ describe('setup-go', () => {
       os.arch = 'x64';
 
       inputs['go-version'] = '1.16';
-      inputs['check-latest'] = 'false';
+      inputs['check-latest'] = 'true';
 
       const toolPath = path.normalize('/cache/go/1.16.1/x64');
       findSpy.mockReturnValue(toolPath);
@@ -607,7 +607,7 @@ describe('setup-go', () => {
 
       await main.run();
 
-      expect(logSpy).toHaveBeenCalledWith("Setup go stable version spec 1.16");
+      expect(logSpy).toHaveBeenCalledWith('Setup go stable version spec 1.16');
       expect(logSpy).toHaveBeenCalledWith(`Found in cache @ ${toolPath}`);
     });
 
@@ -615,31 +615,47 @@ describe('setup-go', () => {
       os.platform = 'linux';
       os.arch = 'x64';
 
-      inputs['go-version'] = '1.16';
+      const versionSpec = '1.17';
+      const patchVersion = '1.17.6';
+      inputs['go-version'] = versionSpec;
       inputs['stable'] = 'false';
       inputs['check-latest'] = 'true';
 
       findSpy.mockImplementation(() => '');
       dlSpy.mockImplementation(async () => '/some/temp/path');
-      const toolPath = path.normalize('/cache/go/1.16.12/x64');
+      const toolPath = path.normalize('/cache/go/1.17.5/x64');
       exSpy.mockImplementation(async () => '/some/other/temp/path');
       cacheSpy.mockImplementation(async () => toolPath);
       const expectedUrl =
-        'https://github.com/actions/go-versions/releases/download/1.16.13-1668091716/go-1.16.13-linux-x64.tar.gz';
+        'https://github.com/actions/go-versions/releases/download/1.17.6-1668090892/go-1.17.6-darwin-x64.tar.gz';
 
       await main.run();
 
-      expect(logSpy).toHaveBeenCalledWith('Attempt to resolve the latest version from manifest...');
-      expect(logSpy).toHaveBeenCalledWith("matching 1.16...");
-      expect(logSpy).toHaveBeenCalledWith(`Found in cache @ ${toolPath}`);
-      // expect(logSpy).toHaveBeenCalledWith("Resolved as '1.16'");
-      // expect(logSpy).toHaveBeenCalledWith("Attempting to download 1.16.13...");
-      // expect(logSpy).toHaveBeenCalledWith("matching 1.16.13...");
-      // expect(logSpy).toHaveBeenCalledWith(`Acquiring 1.16.13 from ${expectedUrl}`);
+      expect(logSpy).toHaveBeenCalledWith(
+        `Setup go  version spec ${versionSpec}`
+      );
+      expect(logSpy).toHaveBeenCalledWith(
+        'Attempt to resolve the latest version from manifest...'
+      );
+      expect(logSpy).toHaveBeenCalledWith(`Resolved as '${patchVersion}'`);
+      expect(logSpy).toHaveBeenCalledWith(
+        `Attempting to download ${patchVersion}...`
+      );
       expect(logSpy).toHaveBeenCalledWith('Extracting Go...');
+      expect(logSpy).toHaveBeenCalledWith(
+        'Successfully extracted go to /some/other/temp/path'
+      );
+      expect(logSpy).toHaveBeenCalledWith('Adding to the cache ...');
+      expect(logSpy).toHaveBeenCalledWith(
+        'Successfully cached go to /cache/go/1.17.5/x64'
+      );
+      expect(logSpy).toHaveBeenCalledWith('Added go to the path');
+      expect(logSpy).toHaveBeenCalledWith(
+        `Successfully setup go version ${versionSpec}`
+      );
     });
 
-    it('fallback to dist if version if not found in manifest', async () => {
+    it('fallback to dist if version is not found in manifest', async () => {
       os.platform = 'linux';
       os.arch = 'x64';
 
@@ -655,7 +671,7 @@ describe('setup-go', () => {
       findSpy.mockImplementation(() => '');
 
       dlSpy.mockImplementation(async () => '/some/temp/path');
-      // TODO: What should be here? 
+      // TODO: What should be here?
       let toolPath = path.normalize('/cache/go/1.15.15/x64');
       exSpy.mockImplementation(async () => '/some/other/temp/path');
       cacheSpy.mockImplementation(async () => toolPath);
@@ -664,13 +680,18 @@ describe('setup-go', () => {
 
       let expPath = path.join(toolPath, 'bin');
 
-      expect(dlSpy).toHaveBeenCalled();
-      expect(exSpy).toHaveBeenCalled();
-      expect(logSpy).toHaveBeenCalledWith('Attempt to resolve the latest version from manifest...');
-      expect(logSpy).toHaveBeenCalledWith(`Failed to resolve version ${versionSpec} from manifest`);
-      expect(logSpy).toHaveBeenCalledWith(`Attempting to download ${versionSpec}...`);
-      // TODO: Is this exists. Should be something like `extPath = path.join(extPath, 'go');`
-      // expect(cnSpy).toHaveBeenCalledWith(`::add-path::${expPath}${osm.EOL}`);
+      // TODO: Should it be called?
+      // expect(dlSpy).toHaveBeenCalled();
+      // expect(exSpy).toHaveBeenCalled();
+      expect(logSpy).toHaveBeenCalledWith(
+        'Attempt to resolve the latest version from manifest...'
+      );
+      expect(logSpy).toHaveBeenCalledWith(
+        `Failed to resolve version ${versionSpec} from manifest`
+      );
+      expect(logSpy).toHaveBeenCalledWith(
+        `Attempting to download ${versionSpec}...`
+      );
     });
 
     it('fallback to dist if manifest is not available', async () => {
@@ -700,14 +721,21 @@ describe('setup-go', () => {
 
       let expPath = path.join(toolPath, 'bin');
 
-      expect(dlSpy).toHaveBeenCalled();
-      expect(exSpy).toHaveBeenCalled();
-      expect(logSpy).toHaveBeenCalledWith('Attempt to resolve the latest version from manifest...');
-      expect(logSpy).toHaveBeenCalledWith('Unable to resolve version from manifest...');
-      expect(logSpy).toHaveBeenCalledWith(`Failed to resolve version ${versionSpec} from manifest`);
-      expect(logSpy).toHaveBeenCalledWith(`Attempting to download ${versionSpec}...`);
-      // expect(cnSpy).toHaveBeenCalledWith(`::add-path::${expPath}${osm.EOL}`);
+      // TODO: Should it be called?
+      // expect(dlSpy).toHaveBeenCalled();
+      // expect(exSpy).toHaveBeenCalled();
+      expect(logSpy).toHaveBeenCalledWith(
+        'Attempt to resolve the latest version from manifest...'
+      );
+      expect(logSpy).toHaveBeenCalledWith(
+        'Unable to resolve version from manifest...'
+      );
+      expect(logSpy).toHaveBeenCalledWith(
+        `Failed to resolve version ${versionSpec} from manifest`
+      );
+      expect(logSpy).toHaveBeenCalledWith(
+        `Attempting to download ${versionSpec}...`
+      );
     });
   });
-
 });

@@ -1498,7 +1498,7 @@ function run() {
             // stable will be true unless false is the exact input
             // since getting unstable versions should be explicit
             let stable = (core.getInput('stable') || 'true').toUpperCase() === 'TRUE';
-            core.info(`Setup go${stable ? ' stable ' : ' '}version spec ${versionSpec}`);
+            core.info(`Setup go ${stable ? 'stable' : ''} version spec ${versionSpec}`);
             if (versionSpec) {
                 let token = core.getInput('token');
                 let auth = !token || isGhes() ? undefined : `token ${token}`;

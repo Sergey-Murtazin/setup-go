@@ -18,7 +18,7 @@ export async function run() {
     // since getting unstable versions should be explicit
     let stable = (core.getInput('stable') || 'true').toUpperCase() === 'TRUE';
 
-    core.info(`Setup go${stable ? ' stable ' : ' '}version spec ${versionSpec}`);
+    core.info(`Setup go ${stable ? 'stable' : ''} version spec ${versionSpec}`);
 
     if (versionSpec) {
       let token = core.getInput('token');
@@ -26,7 +26,12 @@ export async function run() {
 
       const checkLatest =
         (core.getInput('check-latest') || 'false').toUpperCase() === 'TRUE';
-      const installDir = await installer.getGo(versionSpec, stable, checkLatest, auth);
+      const installDir = await installer.getGo(
+        versionSpec,
+        stable,
+        checkLatest,
+        auth
+      );
 
       core.exportVariable('GOROOT', installDir);
       core.addPath(path.join(installDir, 'bin'));

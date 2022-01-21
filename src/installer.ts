@@ -36,7 +36,7 @@ export async function getGo(
 ) {
   let osPlat: string = os.platform();
   let osArch: string = os.arch();
-  
+
   if (checkLatest) {
     core.info('Attempt to resolve the latest version from manifest...');
     const resolvedVersion = await resolveVersionFromManifest(
