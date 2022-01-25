@@ -618,7 +618,7 @@ describe('setup-go', () => {
       const versionSpec = '1.17';
       const patchVersion = '1.17.6';
       inputs['go-version'] = versionSpec;
-      inputs['stable'] = 'false';
+      inputs['stable'] = 'true';
       inputs['check-latest'] = 'true';
 
       findSpy.mockImplementation(() => '');
@@ -632,7 +632,7 @@ describe('setup-go', () => {
       await main.run();
 
       expect(logSpy).toHaveBeenCalledWith(
-        `Setup go  version spec ${versionSpec}`
+        `Setup go stable version spec ${versionSpec}`
       );
       expect(logSpy).toHaveBeenCalledWith(
         'Attempt to resolve the latest version from manifest...'
@@ -665,8 +665,7 @@ describe('setup-go', () => {
       findSpy.mockImplementation(() => '');
 
       dlSpy.mockImplementation(async () => '/some/temp/path');
-      // TODO: What should be here?
-      let toolPath = path.normalize('/cache/go/1.15.15/x64');
+      let toolPath = path.normalize('/cache/go/1.16.15/x64');
       exSpy.mockImplementation(async () => '/some/other/temp/path');
       cacheSpy.mockImplementation(async () => toolPath);
 
@@ -674,9 +673,8 @@ describe('setup-go', () => {
 
       let expPath = path.join(toolPath, 'bin');
 
-      // TODO: Should it be called?
-      // expect(dlSpy).toHaveBeenCalled();
-      // expect(exSpy).toHaveBeenCalled();
+      expect(dlSpy).toHaveBeenCalled();
+      expect(exSpy).toHaveBeenCalled();
       expect(logSpy).toHaveBeenCalledWith(
         'Attempt to resolve the latest version from manifest...'
       );
@@ -686,6 +684,7 @@ describe('setup-go', () => {
       expect(logSpy).toHaveBeenCalledWith(
         `Attempting to download ${versionSpec}...`
       );
+      expect(cnSpy).toHaveBeenCalledWith(`::add-path::${expPath}${osm.EOL}`);
     });
 
     it('fallback to dist if manifest is not available', async () => {
@@ -715,9 +714,8 @@ describe('setup-go', () => {
 
       let expPath = path.join(toolPath, 'bin');
 
-      // TODO: Should it be called?
-      // expect(dlSpy).toHaveBeenCalled();
-      // expect(exSpy).toHaveBeenCalled();
+      expect(dlSpy).toHaveBeenCalled();
+      expect(exSpy).toHaveBeenCalled();
       expect(logSpy).toHaveBeenCalledWith(
         'Attempt to resolve the latest version from manifest...'
       );
@@ -730,6 +728,7 @@ describe('setup-go', () => {
       expect(logSpy).toHaveBeenCalledWith(
         `Attempting to download ${versionSpec}...`
       );
+      expect(cnSpy).toHaveBeenCalledWith(`::add-path::${expPath}${osm.EOL}`);
     });
   });
 });
