@@ -34,6 +34,7 @@ describe('setup-go', () => {
   let mkdirpSpy: jest.SpyInstance;
   let execSpy: jest.SpyInstance;
   let getManifestSpy: jest.SpyInstance;
+  let getBooleanInputSpy: jest.SpyInstance;
 
   beforeAll(() => {
     process.env['GITHUB_PATH'] = ''; // Stub out ENV file functionality so we can verify it writes to standard out
@@ -45,7 +46,9 @@ describe('setup-go', () => {
     inputs = {};
     inSpy = jest.spyOn(core, 'getInput');
     inSpy.mockImplementation(name => inputs[name]);
-
+    getBooleanInputSpy = jest.spyOn(core, "getBooleanInput");
+    getBooleanInputSpy.mockImplementation(name => inputs[name]);
+    
     // node
     os = {};
     platSpy = jest.spyOn(osm, 'platform');
@@ -695,7 +698,7 @@ describe('setup-go', () => {
       let versionSpec = '1.16';
 
       inputs['go-version'] = versionSpec;
-      inputs['check-latest'] = 'true';
+      inputs['check-latest'] = true;
       inputs['always-auth'] = false;
       inputs['token'] = 'faketoken';
 
@@ -714,6 +717,9 @@ describe('setup-go', () => {
 
       let expPath = path.join(toolPath, 'bin');
 
+      expect(logSpy).toHaveBeenCalledWith(
+        `Failed to resolve version ${versionSpec} from manifest`
+      );
       expect(dlSpy).toHaveBeenCalled();
       expect(exSpy).toHaveBeenCalled();
       expect(logSpy).toHaveBeenCalledWith(
