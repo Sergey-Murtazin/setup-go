@@ -24,8 +24,7 @@ export async function run() {
       let token = core.getInput('token');
       let auth = !token || isGhes() ? undefined : `token ${token}`;
 
-      const checkLatest =
-        (core.getInput('check-latest') || 'false').toUpperCase() === 'TRUE';
+      const checkLatest = core.getBooleanInput('check-latest');
       const installDir = await installer.getGo(
         versionSpec,
         stable,
