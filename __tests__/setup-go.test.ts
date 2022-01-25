@@ -46,9 +46,9 @@ describe('setup-go', () => {
     inputs = {};
     inSpy = jest.spyOn(core, 'getInput');
     inSpy.mockImplementation(name => inputs[name]);
-    getBooleanInputSpy = jest.spyOn(core, "getBooleanInput");
+    getBooleanInputSpy = jest.spyOn(core, 'getBooleanInput');
     getBooleanInputSpy.mockImplementation(name => inputs[name]);
-    
+
     // node
     os = {};
     platSpy = jest.spyOn(osm, 'platform');
@@ -583,7 +583,7 @@ describe('setup-go', () => {
       os.arch = 'x64';
 
       inputs['go-version'] = '1.16';
-      inputs['check-latest'] = 'false';
+      inputs['check-latest'] = false;
 
       const toolPath = path.normalize('/cache/go/1.16.1/x64');
       findSpy.mockReturnValue(toolPath);
@@ -600,7 +600,7 @@ describe('setup-go', () => {
       os.arch = 'x64';
 
       inputs['go-version'] = '1.16';
-      inputs['check-latest'] = 'true';
+      inputs['check-latest'] = true;
 
       const toolPath = path.normalize('/cache/go/1.16.1/x64');
       findSpy.mockReturnValue(toolPath);
@@ -622,7 +622,7 @@ describe('setup-go', () => {
       const patchVersion = '1.17.6';
       inputs['go-version'] = versionSpec;
       inputs['stable'] = 'true';
-      inputs['check-latest'] = 'true';
+      inputs['check-latest'] = true;
 
       findSpy.mockImplementation(() => '');
       dlSpy.mockImplementation(async () => '/some/temp/path');
@@ -657,10 +657,10 @@ describe('setup-go', () => {
       os.arch = 'x64';
 
       // a version which is not in the manifest but is in node dist
-      let versionSpec = '1.16';
+      let versionSpec = '1.13';
 
       inputs['go-version'] = versionSpec;
-      inputs['check-latest'] = 'true';
+      inputs['check-latest'] = true;
       inputs['always-auth'] = false;
       inputs['token'] = 'faketoken';
 
@@ -668,7 +668,7 @@ describe('setup-go', () => {
       findSpy.mockImplementation(() => '');
 
       dlSpy.mockImplementation(async () => '/some/temp/path');
-      let toolPath = path.normalize('/cache/go/1.16.15/x64');
+      let toolPath = path.normalize('/cache/go/1.13.7/x64');
       exSpy.mockImplementation(async () => '/some/other/temp/path');
       cacheSpy.mockImplementation(async () => toolPath);
 
@@ -695,7 +695,7 @@ describe('setup-go', () => {
       os.arch = 'x64';
 
       // a version which is not in the manifest but is in node dist
-      let versionSpec = '1.16';
+      let versionSpec = '1.13';
 
       inputs['go-version'] = versionSpec;
       inputs['check-latest'] = true;
@@ -709,7 +709,7 @@ describe('setup-go', () => {
       });
 
       dlSpy.mockImplementation(async () => '/some/temp/path');
-      let toolPath = path.normalize('/cache/go/1.16.1/x64');
+      let toolPath = path.normalize('/cache/go/1.13.7/x64');
       exSpy.mockImplementation(async () => '/some/other/temp/path');
       cacheSpy.mockImplementation(async () => toolPath);
 

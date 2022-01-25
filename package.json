@@ -9,6 +9,7 @@
     "format": "prettier --write **/*.ts",
     "format-check": "prettier --check **/*.ts",
     "test": "jest --coverage",
+    "jest-check-latext-5": "jest -t 'fallback to dist if manifest is not available'",
     "pre-checkin": "npm run format && npm run build && npm test"
   },
   "repository": {
