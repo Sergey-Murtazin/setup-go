@@ -37,12 +37,10 @@ describe('setup-go', () => {
   let getManifestSpy: jest.SpyInstance;
 
   beforeAll(async () => {
-    console.log('::stop-commands::stoptoken'); // Disable executing of runner commands when running tests in actions
     process.env['GITHUB_ENV'] = ''; // Stub out Environment file functionality so we can verify it writes to standard out (toolkit is backwards compatible)
   }, 100000);
 
   beforeEach(() => {
-    console.log('::stop-commands::stoptoken'); // Disable executing of runner commands when running tests in actions
     process.env['GITHUB_PATH'] = ''; // Stub out ENV file functionality so we can verify it writes to standard out
 
     // @actions/core
@@ -102,7 +100,6 @@ describe('setup-go', () => {
   });
 
   afterAll(async () => {
-    console.log('::stoptoken::'); // Re-enable executing of runner commands when running tests in actions
     jest.restoreAllMocks();
   }, 100000);
 
@@ -701,9 +698,6 @@ describe('setup-go', () => {
       // a version which is not in the manifest but is in node dist
       let versionSpec = '1.13';
 
-      console.log(
-        `process.env['GITHUB_PATH'] = ''; is ${process.env['GITHUB_PATH']}`
-      );
       process.env['GITHUB_PATH'] = '';
 
       inputs['go-version'] = versionSpec;

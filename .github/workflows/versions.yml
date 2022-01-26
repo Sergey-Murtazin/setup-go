@@ -45,7 +45,7 @@ jobs:
       - name: Setup Go and check latest
         uses: ./
         with:
-          node-version: ${{ matrix.go-version }}
+          go-version: ${{ matrix.go-version }}
           check-latest: true
       - name: Verify Go
         run: go version
