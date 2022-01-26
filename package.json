@@ -9,7 +9,6 @@
     "format": "prettier --write **/*.ts",
     "format-check": "prettier --check **/*.ts",
     "test": "jest --coverage",
-    "jest-check-latext-5": "jest -t 'fallback to dist if manifest is not available'",
     "pre-checkin": "npm run format && npm run build && npm test"
   },
   "repository": {
@@ -25,7 +24,7 @@
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.6.0",
-    "@actions/http-client": "^1.0.8",
+    "@actions/http-client": "^1.0.6",
     "@actions/io": "^1.0.2",
     "@actions/tool-cache": "^1.5.5",
     "semver": "^6.1.1"
