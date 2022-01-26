@@ -19,6 +19,7 @@ describe('setup-go', () => {
   let os = {} as any;
 
   let inSpy: jest.SpyInstance;
+  let getBooleanInputSpy: jest.SpyInstance;
   let findSpy: jest.SpyInstance;
   let cnSpy: jest.SpyInstance;
   let logSpy: jest.SpyInstance;
@@ -34,14 +35,16 @@ describe('setup-go', () => {
   let mkdirpSpy: jest.SpyInstance;
   let execSpy: jest.SpyInstance;
   let getManifestSpy: jest.SpyInstance;
-  let getBooleanInputSpy: jest.SpyInstance;
 
-  beforeAll(() => {
-    process.env['GITHUB_PATH'] = ''; // Stub out ENV file functionality so we can verify it writes to standard out
+  beforeAll(async () => {
     console.log('::stop-commands::stoptoken'); // Disable executing of runner commands when running tests in actions
-  });
+    process.env['GITHUB_ENV'] = ''; // Stub out Environment file functionality so we can verify it writes to standard out (toolkit is backwards compatible)
+  }, 100000);
 
   beforeEach(() => {
+    console.log('::stop-commands::stoptoken'); // Disable executing of runner commands when running tests in actions
+    process.env['GITHUB_PATH'] = ''; // Stub out ENV file functionality so we can verify it writes to standard out
+
     // @actions/core
     inputs = {};
     inSpy = jest.spyOn(core, 'getInput');
@@ -84,7 +87,7 @@ describe('setup-go', () => {
     });
     logSpy.mockImplementation(line => {
       // uncomment to debug
-      // process.stderr.write('log:' + line + '\n');
+      process.stderr.write('log:' + line + '\n');
     });
     dbgSpy.mockImplementation(msg => {
       // uncomment to see debug output
@@ -100,6 +103,7 @@ describe('setup-go', () => {
 
   afterAll(async () => {
     console.log('::stoptoken::'); // Re-enable executing of runner commands when running tests in actions
+    jest.restoreAllMocks();
   }, 100000);
 
   it('can find 1.9.7 from manifest on osx', async () => {
@@ -697,6 +701,11 @@ describe('setup-go', () => {
       // a version which is not in the manifest but is in node dist
       let versionSpec = '1.13';
 
+      console.log(
+        `process.env['GITHUB_PATH'] = ''; is ${process.env['GITHUB_PATH']}`
+      );
+      process.env['GITHUB_PATH'] = '';
+
       inputs['go-version'] = versionSpec;
       inputs['check-latest'] = true;
       inputs['always-auth'] = false;
@@ -734,6 +743,7 @@ describe('setup-go', () => {
       expect(logSpy).toHaveBeenCalledWith(
         `Attempting to download ${versionSpec}...`
       );
+
       expect(cnSpy).toHaveBeenCalledWith(`::add-path::${expPath}${osm.EOL}`);
     });
   });
