@@ -59,9 +59,9 @@ steps:
 
 ## Check latest version:  
 
-The `check-latest` flag defaults to `false`. When set to `false`, the action will first check the local cache for a semver match. If unable to find a specific version in the cache, the action will attempt to download a Go version. It will pull LTS versions from [go-versions releases](https://github.com/actions/go-versions/releases) and on miss or failure will fall back to the previous behavior of downloading directly from [go dist](https://storage.googleapis.com/golang). Use the default or set `check-latest` to `false` if you prefer stability and if you want to ensure a specific version of Node.js is always used.
+The `check-latest` flag defaults to `false`. When set to `false`, the action will first check the local cache for a semver match. If unable to find a specific version in the cache, the action will attempt to download a Go version. It will pull LTS versions from [go-versions releases](https://github.com/actions/go-versions/releases) and on miss or failure will fall back to the previous behavior of downloading directly from [go dist](https://storage.googleapis.com/golang). Use the default or set `check-latest` to `false` if you prefer stability and if you want to ensure a specific Go version is always used.
 
-If `check-latest` is set to `true`, the action first checks if the cached version is the latest one. If the locally cached version is not the most up-to-date, a version of Node.js will then be downloaded. Set `check-latest` to `true` it you want the most up-to-date Go version to always be used.
+If `check-latest` is set to `true`, the action first checks if the cached version is the latest one. If the locally cached version is not the most up-to-date, a Go version will then be downloaded. Set `check-latest` to `true` it you want the most up-to-date Go version to always be used.
 
 > Setting `check-latest` to `true` has performance implications as downloading Go versions is slower than using cached versions.
 
