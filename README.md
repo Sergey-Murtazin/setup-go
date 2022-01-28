@@ -49,7 +49,7 @@ See [action.yml](action.yml)
 ## Basic:
 ```yaml
 steps:
-  - uses: actions/checkout@master
+  - uses: actions/checkout@v2
   - uses: actions/setup-go@v2
     with:
       go-version: '1.16.1' # The Go version to download (if necessary) and use.
