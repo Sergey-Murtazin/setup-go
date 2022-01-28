@@ -46,7 +46,7 @@ steps:
 
 See [action.yml](action.yml)
 
-Basic:
+## Basic:
 ```yaml
 steps:
   - uses: actions/checkout@master
@@ -57,9 +57,14 @@ steps:
 ```
 
 
-Check latest version:  
-> In basic example, without `check-latest` flag, the action tries to resolve version from local cache firstly and download only if it is not found. Local cache on image is updated with a couple of weeks latency.  
-`check-latest` flag forces the action to check if the cached version is the latest one. It reduces latency significantly but it is much more likely to incur version downloading.
+## Check latest version:  
+
+The `check-latest` flag defaults to `false`. When set to `false`, the action will first check the local cache for a semver match. If unable to find a specific version in the cache, the action will attempt to download a version of Node.js. It will pull LTS versions from [go-versions releases](https://github.com/actions/go-versions/releases) and on miss or failure will fall back to the previous behavior of downloading directly from [go dist](https://storage.googleapis.com/golang). Use the default or set `check-latest` to `false` if you prefer stability and if you want to ensure a specific version of Node.js is always used.
+
+If `check-latest` is set to `true`, the action first checks if the cached version is the latest one. If the locally cached version is not the most up-to-date, a version of Node.js will then be downloaded. Set `check-latest` to `true` it you want the most up-to-date Go version to always be used.
+
+> Setting `check-latest` to `true` has performance implications as downloading Go versions is slower than using cached versions.
+
 ```yaml
 steps:
   - uses: actions/checkout@master
@@ -70,8 +75,7 @@ steps:
   - run: go run hello.go
 ```
 
-
-Matrix Testing:
+## Matrix Testing:  
 ```yaml
 jobs:
   build:
@@ -96,15 +100,6 @@ Specific versions: `1.15`, `1.16.1`, `1.17.0-rc2`, `1.16.0-beta1`
 SemVer's version range syntax: `^1.13.1`  
 For more information about semantic versioning please refer [semver](https://github.com/npm/node-semver) documentation
 
-
-# Keep in mind: latest, cached go compilers and semver notation.
-
-The `setup-go` action doesn't install the latest matched version if the cached version matches one from WF file.
-
-**For example:**  
-Currently, there is three go compilers on [Ubuntu 20.04.3 LTS](https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2004-README.md) virtual environment: `1.15.15`, `1.16.12`, `1.17.5`.  
-When the `1.17.6` version will be out and there is `1.17.*` in `go-version` field, the cached `1.17.5` version will be used. Not the new one. Until the cached version will be updated to the latest `1.17.6`.   
-If you will specify fully `1.17.6`, the default installation process begins.
 
 # License
 
