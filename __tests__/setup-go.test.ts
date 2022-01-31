@@ -379,7 +379,6 @@ describe('setup-go', () => {
     os.platform = 'linux';
     os.arch = 'x64';
 
-    // a version which is not in the manifest but is in node dist
     let versionSpec = '1.12.14';
 
     inputs['go-version'] = versionSpec;
@@ -657,7 +656,6 @@ describe('setup-go', () => {
       os.platform = 'linux';
       os.arch = 'x64';
 
-      // a version which is not in the manifest but is in node dist
       let versionSpec = '1.13';
 
       inputs['go-version'] = versionSpec;
@@ -695,7 +693,6 @@ describe('setup-go', () => {
       os.platform = 'linux';
       os.arch = 'x64';
 
-      // a version which is not in the manifest but is in node dist
       let versionSpec = '1.13';
 
       process.env['GITHUB_PATH'] = '';
