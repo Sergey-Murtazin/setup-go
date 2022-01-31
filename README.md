@@ -16,10 +16,11 @@ This action sets up a go environment for use in actions by:
 The V2 offers:
 - Adds GOBIN to the PATH
 - Proxy Support
-- stable input 
+- `stable` input 
+- Check latest version
 - Bug Fixes (including issues around version matching and semver)
 
-It will first check the local cache for a version match. If version is not found locally, It will pull it from `main` branch of [go-versions](https://github.com/actions/go-versions/blob/main/versions-manifest.json) repository and on miss or failure, it will fall back to the previous behavior of download directly from [go dist](https://storage.googleapis.com/golang).
+It will first check the local cache for a version match. If version is not found locally, It will pull it from `main` branch of [go-versions](https://github.com/actions/go-versions/blob/main/versions-manifest.json) repository and on miss or failure, it will fall back to the previous behavior of download directly from [go dist](https://storage.googleapis.com/golang). To change the default behaviour please use [check-latest input](#check-latest-version).
 
 Matching by [semver spec](https://github.com/npm/node-semver):
 ```yaml
@@ -59,7 +60,7 @@ steps:
 
 ## Check latest version:  
 
-The `check-latest` flag defaults to `false`. When set to `false`, the action will first check the local cache for a semver match. If unable to find a specific version in the cache, the action will attempt to download a Go version. It will pull LTS versions from [go-versions releases](https://github.com/actions/go-versions/releases) and on miss or failure will fall back to the previous behavior of downloading directly from [go dist](https://storage.googleapis.com/golang). Use the default or set `check-latest` to `false` if you prefer stability and if you want to ensure a specific Go version is always used.
+The `check-latest` flag defaults to `false`. Use the default or set `check-latest` to `false` if you prefer stability and if you want to ensure a specific Go version is always used.
 
 If `check-latest` is set to `true`, the action first checks if the cached version is the latest one. If the locally cached version is not the most up-to-date, a Go version will then be downloaded. Set `check-latest` to `true` it you want the most up-to-date Go version to always be used.
 

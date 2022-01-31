@@ -49,7 +49,6 @@ jobs:
           check-latest: true
       - name: Verify Go
         run: go version
-        shell: bash
 
   setup-versions-from-manifest:
     name: Setup ${{ matrix.go }} ${{ matrix.os }}

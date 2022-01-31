@@ -303,7 +303,6 @@ describe('setup-go', () => {
     os.platform = 'linux';
     os.arch = 'x64';
 
-    // a version which is in the manifest
     let versionSpec = '1.12.16';
 
     inputs['go-version'] = versionSpec;
@@ -341,7 +340,6 @@ describe('setup-go', () => {
     os.platform = 'linux';
     os.arch = 'x64';
 
-    // a version which is in the manifest
     let versionSpec = '1.12';
 
     inputs['go-version'] = versionSpec;
